@@ -1,0 +1,385 @@
+% jbook.sty 18-Dec-88
+%
+%   博士論文用に修正     2001.11.6-12.3
+%
+%   修正部分は yabu という文字列を検索すること
+%
+%   本ファイルより y-jbk11.sty と y-ieice.sty をインクルードする。
+%
+
+\typeout{Document Style `jbook'. <18 Dec 88>}
+
+% yabu
+%
+% latex.tex より引用  \cleardoublepage を上書き
+% 章の直前のページが白紙になるときは、ページ番号を打たない
+
+\def\cleardoublepage{%
+\clearpage%
+\if@twoside%
+   \ifodd \c@page \else \hbox{}\thispagestyle{empty}%\newpage%
+           \if@twocolumn\hbox{}\thispagestyle{empty}%\newpage\fi%
+   \fi%
+\fi%
+}
+
+\def\@ptsize{0} \@namedef{ds@11pt}{\def\@ptsize{1}}
+\@namedef{ds@12pt}{\def\@ptsize{2}} 
+\@twosidetrue \@mparswitchtrue \def\ds@draft{\overfullrule 5pt} 
+\@options
+%
+% yabu
+% インクルードするファイルを jbk11.sty から y-jbk11.sty に変更
+%\input jbk1\@ptsize.sty\relax
+\input y-jbk1\@ptsize.sty\relax
+
+
+\def\labelenumi{\theenumi.} 
+\def\theenumi{\arabic{enumi}} 
+\def\labelenumii{(\theenumii)}
+\def\theenumii{\alph{enumii}}
+\def\p@enumii{\theenumi}
+\def\labelenumiii{\theenumiii.}
+\def\theenumiii{\roman{enumiii}}
+\def\p@enumiii{\theenumi(\theenumii)}
+\def\labelenumiv{\theenumiv.}
+\def\theenumiv{\Alph{enumiv}} 
+\def\p@enumiv{\p@enumiii\theenumiii}
+
+\def\labelitemi{$\bullet$}
+\def\labelitemii{\bf --}
+\def\labelitemiii{$\ast$}
+\def\labelitemiv{$\cdot$}
+
+\def\verse{\let\\=\@centercr 
+ \list{}{\itemsep\z@ \itemindent -1.5em\listparindent \itemindent 
+ \rightmargin\leftmargin\advance\leftmargin 1.5em}\item[]}
+\let\endverse\endlist
+\def\quotation{\list{}{\listparindent 1.5em
+ \itemindent\listparindent
+ \rightmargin\leftmargin\parsep 0pt plus 1pt}\item[]}
+\let\endquotation=\endlist
+\def\quote{\list{}{\rightmargin\leftmargin}\item[]}
+\let\endquote=\endlist
+
+\def\descriptionlabel#1{\hspace\labelsep \bf #1}
+\def\description{\list{}{\labelwidth\z@ \itemindent-\leftmargin
+ \let\makelabel\descriptionlabel}}
+\let\enddescription\endlist
+\newdimen\descriptionmargin
+\descriptionmargin=3em
+
+
+\def\titlepage{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \else \newpage \fi \thispagestyle{empty}\c@page\z@}
+\def\endtitlepage{\if@restonecol\twocolumn \else \newpage \fi}
+
+\arraycolsep 5pt \tabcolsep 6pt \arrayrulewidth .4pt \doublerulesep 2pt 
+\tabbingsep \labelsep 
+\skip\@mpfootins = \skip\footins
+\fboxsep = 3pt \fboxrule = .4pt 
+
+\newcounter{part}
+\newcounter {chapter}
+\newcounter {section}[chapter]
+\newcounter {subsection}[section]
+\newcounter {subsubsection}[subsection]
+\newcounter {paragraph}[subsubsection]
+\newcounter {subparagraph}[paragraph]
+
+\def\thepart {\Roman{part}}
+\def\thechapter {\arabic{chapter}}
+\def\thesection {\thechapter.\arabic{section}}
+\def\thesubsection {\thesection.\arabic{subsection}}
+\def\thesubsubsection {\thesubsection .\arabic{subsubsection}}
+\def\theparagraph {\thesubsubsection.\arabic{paragraph}}
+\def\thesubparagraph {\theparagraph.\arabic{subparagraph}}
+
+% yabu
+%
+% 章の見出しを「Chapter 1」から「第1章」に変更
+% @chapapp 命令の引数の数が 0 から 1 に変化しているのに注意
+%
+%\def\@chapapp{Chapter}
+\def\@chapapp#1{第#1章}
+
+\def\part{\cleardoublepage \thispagestyle{plain} \if@twocolumn \onecolumn
+\@tempswatrue \else \@tempswafalse \fi \hbox{}\vfil \secdef\@part\@spart} 
+
+\def\@part[#1]#2{\ifnum \c@secnumdepth >-2\relax \refstepcounter{part}
+\addcontentsline{toc}{part}{\thepart \hspace{1em}#1}\else
+\addcontentsline{toc}{part}{#1}\fi \markboth{}{}
+ {\centering \ifnum \c@secnumdepth >-2\relax \huge\bf Part \thepart \par
+\vskip 20pt \fi \Huge \bf #1\par}\@endpart} 
+\def\@endpart{\vfil\newpage \if@twoside \hbox{} \thispagestyle{empty} 
+ \newpage 
+ \fi \if@tempswa \twocolumn \fi} 
+\def\@spart#1{{\centering \Huge \bf #1\par}\@endpart}
+
+% yabu
+% 目次の体裁を決めるパラメータの値を少し変更
+%
+\def\@chapnumwidth{1em}
+\def\@pnumwidth{1.6em}   % 目次のページでページ番号記述用領域の幅  デフォルト1.3
+\def\@tocrmarg {2.55em}
+\def\@dotsep{2.5}      % ドットの間隔  デフォルト 4.5
+\setcounter{tocdepth}{2}
+
+\def\tableofcontents{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+% yabu
+% 目次のページのヘッダを「目 次」から「目次」に変更
+% \fi\chapter*{目 次\@mkboth{目 次}{目 次}}
+ \fi\chapter*{目 次\@mkboth{目次}{目次}}
+ \@starttoc{toc}
+% 次の \ifodd は、目次のページが奇数で終わるときに白紙のページを
+% 付け加えるために作ったが、\cleardoublepage をカスタマイズしたので
+% その必要はなくなった。
+%\ifodd \c@page \newpage \thispagestyle{empty}\newpage \fi%
+\if@restonecol\twocolumn\fi}
+
+\def\l@part#1#2{\addpenalty{-\@highpenalty}
+ \addvspace{2.25em plus 1pt} \begingroup
+ \@tempdima 3em \parindent \z@ \rightskip \@pnumwidth \parfillskip
+-\@pnumwidth 
+ {\large \bf \leavevmode #1\hfil \hbox to\@pnumwidth{\hss #2}}\par
+ \nobreak \endgroup}
+
+\def\l@chapter#1#2{%
+ \pagebreak[3] 
+ \vskip 1.0em plus 1pt \@tempdima 1.5em \begingroup
+ \parindent \z@ \rightskip \@pnumwidth 
+ \parfillskip -\@pnumwidth 
+ \bf \leavevmode \advance\leftskip\@tempdima \hskip -\leftskip #1\nobreak\hfil
+\nobreak\hbox to\@pnumwidth{\hss #2}\par
+ \endgroup}
+%  yabu
+%  以下の案は 「第1章」などの行にも点線を入れる。しかし、
+%  これらの行はフォントが bold になっている。その場合、
+%  @pnumwidth 異なってしまうようで、点線の終わりの位置が 1.1 や 1.1.1 など
+%  の行と合わない。ボツにする
+%
+% \bf \leavevmode \advance\leftskip\@tempdima \hskip -\leftskip #1\nobreak　%
+%\leaders\hbox{$\m@th \mkern \@dotsep mu \raise 3pt \hbox{.} \mkern \@dotsep mu$}\hfil
+%\nobreak\hbox to \@pnumwidth{\hss #2}\par
+% \endgroup}
+
+\def\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
+% 最初の 1 は toc の深さの定義、1.5em は左端からの字下げ幅、
+% 2.3em は番号と見出しの間隔
+\def\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
+
+% yabu 
+% latex.tex の dottedtocline を上書きして点線をカスタマイズ
+% 点の位置が日本語用としては下すぎるので、3pt 上に上げる
+
+\def\@dottedtocline#1#2#3#4#5{\ifnum #1>\c@tocdepth \else
+  \vskip \z@ plus .2pt
+  {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+    \parindent #2\relax\@afterindenttrue
+   \interlinepenalty\@M
+   \leavevmode 
+   \@tempdima #3\relax \advance\leftskip \@tempdima \hbox{}\hskip -\leftskip
+    #4\nobreak\leaders\hbox{$\m@th \mkern \@dotsep mu \raise 3pt \hbox{.} \mkern \@dotsep mu$}%
+%    #4\nobreak\leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep mu$}%
+   \hfill \nobreak \hbox to \@pnumwidth{\hfil\rm #5}\par}\fi}
+
+\def\l@subsubsection{\@dottedtocline{3}{7.0em}{4.1em}}
+\def\l@paragraph{\@dottedtocline{4}{10em}{5em}}
+\def\l@subparagraph{\@dottedtocline{5}{12em}{6em}}
+\def\listoffigures{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \fi\chapter*{図 目 次\@mkboth
+ {図 目 次}{図 目 次}}\@starttoc{lof}\if@restonecol
+ \twocolumn\fi}
+\def\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+\def\listoftables{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \fi\chapter*{表 目 次\@mkboth
+ {表 目 次}{表 目 次}}\@starttoc{lot}\if@restonecol
+ \twocolumn\fi}
+\let\l@table\l@figure
+
+
+% yabu
+% 見出しを「Bibliography」から「参考文献」に変更
+% ヘッダを「関 連 書 籍」から「参考文献」に変更
+%
+%\def\thebibliography#1{\chapter*{Bibliography\@mkboth
+\def\thebibliography#1{\chapter*{参考文献\@mkboth
+% {関 連 書 籍}{関 連 書 籍}}\list
+ {参考文献}{参考文献}}\list
+ {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep
+ \usecounter{enumi}}
+ \def\newblock{\hskip .11em plus .33em minus .07em}
+ \sloppy
+ \sfcode`\.=1000\relax}
+\let\endthebibliography=\endlist
+ 
+
+\newif\if@restonecol
+\def\theindex{\@restonecoltrue\if@twocolumn\@restonecolfalse\fi
+\columnseprule \z@
+\columnsep 35pt\twocolumn[\@makeschapterhead{索 引}]
+ \@mkboth{索 引}{索 引}\thispagestyle{plain}\parindent\z@
+ \parskip\z@ plus .3pt\relax\let\item\@idxitem}
+\def\@idxitem{\par\hangindent 40pt}
+\def\subitem{\par\hangindent 40pt \hspace*{20pt}}
+\def\subsubitem{\par\hangindent 40pt \hspace*{30pt}}
+\def\endtheindex{\if@restonecol\onecolumn\else\clearpage\fi}
+\def\indexspace{\par \vskip 10pt plus 5pt minus 3pt\relax}
+
+\def\footnoterule{\kern-3\p@ 
+ \hrule width .4\columnwidth 
+ \kern 2.6\p@} 
+\@addtoreset{footnote}{chapter} 
+\long\def\@makefntext#1{\parindent 1em\noindent 
+ \hbox to 1.8em{\hss$^{\@thefnmark}$}#1}
+
+
+\setcounter{topnumber}{2}
+\def\topfraction{.7}
+\setcounter{bottomnumber}{1}
+\def\bottomfraction{.3}
+\setcounter{totalnumber}{3}
+\def\textfraction{.2}
+\def\floatpagefraction{.5}
+\setcounter{dbltopnumber}{2}
+\def\dbltopfraction{.7}
+\def\dblfloatpagefraction{.5}
+
+\long\def\@makecaption#1#2{
+ \vskip 10pt 
+%
+% yabu
+% 図や表のキャプションの形式を
+% 「図1: キャプション」から「図1  キャプション」に変更
+%
+% \setbox\@tempboxa\hbox{#1: #2}
+ \setbox\@tempboxa\hbox{#1\ \ \ #2}
+ \ifdim \wd\@tempboxa >\hsize \unhbox\@tempboxa\par \else \hbox
+to\hsize{\hfil\box\@tempboxa\hfil} 
+ \fi}
+
+
+\newcounter{figure}[chapter]
+\def\thefigure{\thechapter.\@arabic\c@figure}
+\def\fps@figure{tbp}
+\def\ftype@figure{1}
+\def\ext@figure{lof}
+\def\fnum@figure{図 \thefigure}
+\def\figure{\@float{figure}}
+\let\endfigure\end@float
+\@namedef{figure*}{\@dblfloat{figure}}
+\@namedef{endfigure*}{\end@dblfloat}
+\newcounter{table}[chapter]
+\def\thetable{\thechapter.\@arabic\c@table}
+\def\fps@table{tbp}
+\def\ftype@table{2}
+\def\ext@table{lot}
+\def\fnum@table{表 \thetable}
+\def\table{\@float{table}}
+\let\endtable\end@float
+\@namedef{table*}{\@dblfloat{table}}
+\@namedef{endtable*}{\end@dblfloat}
+
+\def\maketitle{\begin{titlepage}
+ \let\footnotesize\small \let\footnoterule\relax \setcounter{page}{0}
+ \null
+ \vfil
+ \vskip 60pt \begin{center}
+ {\LARGE \@title \par} \vskip 3em {\large \lineskip .75em
+ \begin{tabular}[t]{c}\@author 
+ \end{tabular}\par} 
+ \vskip 1.5em {\large \@date \par} \end{center} \par
+\@thanks
+\vfil
+\null
+\end{titlepage}
+\setcounter{footnote}{0} \let\thanks\relax
+\gdef\@thanks{}\gdef\@author{}\gdef\@title{}\let\maketitle\relax} 
+
+
+\mark{{}{}} % 左右の柱を初期化
+
+% yabu
+% 以下の headings ページスタイルは、私の論文では使わないので
+% @chapapp 命令は修正していない
+
+\def\ps@headings{\let\@mkboth\markboth
+\def\@oddfoot{}\def\@evenfoot{}\def\@evenhead{\rm \thepage\hfil \sl
+\leftmark}\def\@oddhead{\hbox{}\sl \rightmark \hfil
+\rm\thepage}\def\chaptermark##1{\markboth {\uppercase{\ifnum \c@secnumdepth
+>\m@ne
+ \@chapapp\ \thechapter. \ \fi ##1}}{}}\def\sectionmark##1{\markright
+{\uppercase{\ifnum \c@secnumdepth >\z@
+ \thesection. \ \fi ##1}}}}
+
+% yabu
+%
+%  myheadings をこの論文の標準のレイアウトに改造する
+%
+%  参考  LateX スーパー活用術  p.140 p.256
+%        美文書作成入門        p.186
+%
+%\def\ps@myheadings{\let\@mkboth\@gobbletwo
+\def\ps@myheadings{\let\@mkboth\markboth% markboth に変更しないと目次の部分で「目次」の文字が出なくなる
+\def\@oddfoot{}
+\def\@evenfoot{}
+%
+%   偶数ページのヘッダ
+%
+%\def\@evenhead{\underline{\hbox to \textwidth{{\rm\thepage}\hfil\leftmark}}}
+%\def\@evenhead{\underline{\hbox to \textwidth{{\small\bf\thepage}\hfil\small\bf\leftmark}}}
+\def\@evenhead{\underline{\hbox to \textwidth{\hbox{}\small\bf\rightmark\hfil\small\bf\thepage}}}
+%
+%   奇数ページのヘッダ
+%
+%\def\@oddhead{\underline{\hbox to \textwidth{\hbox{}\rightmark\hfil\rm\thepage}}}
+\def\@oddhead{\underline{\hbox to \textwidth{\hbox{}\small\bf\rightmark\hfil\small\bf\thepage}}}
+%
+%   章の見出しをヘッダに入れる命令
+%   def の内側で def しているので、変数名が ##1 となっている
+%
+\def\chaptermark##1{\markboth % 左右ページのヘッダに出力
+{\ifnum \c@secnumdepth>\m@ne \@chapapp\thechapter　\,\fi ##1}% 左ページのヘッダ
+% ページ番号が -1 より大きいなら入れる
+{\ifnum \c@secnumdepth>\m@ne \@chapapp\thechapter　\,\fi ##1}% 右ページのヘッダ
+}
+%
+%   節見出しをヘッダに入れる命令
+%
+\def\sectionmark##1{\markright% 右ページのヘッダに出力
+{\ifnum \c@secnumdepth>\z@ \thesection　\fi ##1}%  0より大きいなら入れる
+}
+%
+}% myheadings の定義の終わり
+
+% yabu
+%
+% 章の最初のページ用のページスタイル chapheadings を創設する
+% 坂本大くん作成の thesis21.sty を引用したものを改造
+%
+\def\ps@chapheadings{%
+\let\@mkboth\markboth
+%\def\@oddhead{\hbox {}\hfil {\rm\thepage}}% もともとの定義
+%\def\@oddhead{\hbox {}\hfil {\small\bf\thepage}}%
+%\def\chaptermark##1{\markright{\uppercase{\ifnum \c@secnumdepth}}}% この行の意味は良く分からないのでコメントアウト
+}
+
+
+\newif\if西暦\let\if西暦=\iffalse \def\西暦{\let\if西暦=\iftrue}
+\def\today{{\if西暦\count0=\year\else%
+\count0=\year\advance\count0 -1988 平成\,\fi%
+\ifnum\count0=1 元\else\number\count0\fi\,年\hspace{.5em}\nobreak%
+\number\month\,月\hspace{.5em}\nobreak\number\day\,日}}
+\@addtoreset{equation}{chapter} 
+\def\theequation{\thechapter.\arabic{equation}}
+
+
+\ps@headings \pagenumbering{arabic} \onecolumn 
+
+% yabu
+%
+%  参考文献の書式  信学論のスタイルファイルをそのまま借用
+%
+\input y-ieicej.sty
+

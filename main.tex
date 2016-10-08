@@ -1,0 +1,77 @@
+\documentstyle[11pt,graphicx,epsf,multirow,longtable]{y-jbook}
+\topmargin      0.3cm
+\textwidth      40zw   % 14.815 cm
+\oddsidemargin  0.6cm
+\evensidemargin 0.6cm
+\headsep        0.8cm  % ヘッダと本文の間隔
+\parindent 0.4cm
+\pagestyle{myheadings}
+
+\begin{document}
+\pagenumbering{roman}%     目次はローマ数字
+\input{cover/cover.tex}
+% 	表紙ページは別ファイルで作成
+\setlength{\baselineskip}{1.8zw}
+\setlength{\textheight}{33\baselineskip}% ここでの設定は表紙には効かない
+\addtolength{\textheight}{\topskip}     % この場所で設定する必要がある
+% 行数は 34 行  topskip は文字領域の上端から
+% 1 行目のベースラインまでの距離
+
+% 図のレイアウト
+\setcounter{topnumber}{5}%    ページ上部の図表は 5 個まで
+\def\topfraction{1.00}%       ページの上 1.00 まで図表で占めて可
+\setcounter{bottomnumber}{5}% ページ下部の図表は 5 個まで
+\def\bottomfraction{1.00}%    ページの下 1.00 まで図表で占めて可
+\setcounter{totalnumber}{10}% ページあたりの図表は 10 個まで
+\def\textfraction{0.04}%      ページうち本文が占める割合の下限
+%        これを 0 にすると本文が 1 行だけのページが出来る
+%        0.04 にすると 1 行だけのページは防げる
+%        0.1 くらいが良いかも知れない
+\def\floatpagefraction{0.7}%  図表だけのページは少なくともこれだけで図表が占める
+
+\chapter*{概要}
+ここに概要を記入．
+\addcontentsline{toc}{chapter}{概要}
+
+\chapter*{Summary}
+ここに Summary を記入．
+\addcontentsline{toc}{chapter}{Summary}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \pagenumbering{roman}%     目次はローマ数字
+\tableofcontents % 目次作成
+\clearpage
+
+\pagenumbering{arabic} % アラビア数字
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% 論文の中身を記載．
+%%% 章ごとに tex ファイルを作り，inputで読み込むと見やすいかも
+\chapter{序論}
+\input{src/section1.tex}
+
+\chapter{理論}
+ここは理論．
+参考文献\cite{hogehoge}
+
+\chapter{結論}
+ここは結論．そう，結論．
+
+
+\chapter*{謝辞}\markboth{謝辞}{謝辞}
+感謝の気持ちを綴る．ありがとう．ありがとう．そして，ありがとう．
+\begin{flushright}
+平成29年2月　著者記す\\
+\end{flushright}
+\addcontentsline{toc}{chapter}{謝辞}
+
+
+\addcontentsline{toc}{chapter}{参考文献}
+\begin{thebibliography}{n}
+% 参考文献を記載
+\bibitem{hogehoge}参考文献
+\end{thebibliography}
+% \chapter*{付録}
+% \addcontentsline{toc}{chapter}{付録}
+
+\end{document}
