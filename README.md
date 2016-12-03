@@ -6,6 +6,7 @@ latexmk is avaiable to typeset without modifying your `.latexmkrc`.
 latexmk use a `.latexmkrc` on the current direcotry.
 
 ```
+./clean.sh # to export $TEXINPUT
 latexmk -pvc main.tex
 ```
 
